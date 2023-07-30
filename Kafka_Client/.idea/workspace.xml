@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8cecc424-928c-4153-9703-5c3d26bc7e3d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/ConsumerAppWithShutdown.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka_basics/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/kafka_basics/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/ConsumerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/ConsumerApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaProducer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaAppCallBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaProducerWithCallBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaAppDemoKeys.java" beforeDir="false" afterPath="$PROJECT_DIR$/kafka_basics/src/main/java/com/basic/KafkaProducerWithKeys.java" afterDir="false" />
-    </list>
+    <list default="true" id="8cecc424-928c-4153-9703-5c3d26bc7e3d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
