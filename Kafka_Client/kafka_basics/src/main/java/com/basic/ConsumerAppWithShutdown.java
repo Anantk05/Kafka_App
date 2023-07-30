@@ -3,6 +3,7 @@ package com.basic;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerApp {
+public class ConsumerAppWithShutdown {
 
     private static final Logger log = (Logger) LoggerFactory.getLogger(KafkaProducerDemo.class.getSimpleName());
 
@@ -47,19 +48,47 @@ public class ConsumerApp {
         // create a consumer
         KafkaConsumer<String ,String > consumer = new KafkaConsumer<>(properties);
 
-        // suscribe to a topic
-        consumer.subscribe(Arrays.asList(topic));
+        //get a reference to the main thread
+        final Thread mainnThread = Thread.currentThread();
 
-        //poll for data
-        while (true){
-            log.info("Polling");
+        //adding the shutdownhook
 
-           ConsumerRecords<String ,String > records =  consumer.poll(Duration.ofMillis(1000));
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                log.info("Detected a shutdown, let's exit by calling consumer.wakeup()...");
+                consumer.wakeup();
 
-           for (ConsumerRecord<String ,String > record:records){
-               log.info("key: " + record.key() + ", Value: " + record.value());
-               log.info("Partition: " + record.partition() + ", Offset: " + record.offset());
-           }
+                // join the main thread to allow the execution the code in the main thread
+                try {
+                    mainnThread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+
+        try {
+            // suscribe to a topic
+            consumer.subscribe(Arrays.asList(topic));
+
+            //poll for data
+            while (true){
+
+                ConsumerRecords<String ,String > records =  consumer.poll(Duration.ofMillis(1000));
+
+                for (ConsumerRecord<String ,String > record:records){
+                    log.info("key: " + record.key() + ", Value: " + record.value());
+                    log.info("Partition: " + record.partition() + ", Offset: " + record.offset());
+                }
+            }
+
+        } catch (WakeupException we){
+            log.info("Consumer is starting to shut down");
+        } catch (Exception e ){
+            log.error("Unexpected exception in the consumer",e);
+        } finally {
+            consumer.close();//close the consumer, this will also commit offsets
         }
     }
 }

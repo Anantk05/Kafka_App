@@ -1,7 +1,6 @@
 package com.basic;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 
-public class KafkaApp {
+public class KafkaProducerWithKeys {
 
-    private static final Logger log = (Logger) LoggerFactory.getLogger(KafkaApp.class.getSimpleName());
+    private static final Logger log = (Logger) LoggerFactory.getLogger(KafkaProducerWithKeys.class.getSimpleName());
 
     public static void main(String[] args) {
 
@@ -36,11 +35,36 @@ public class KafkaApp {
         //create the producer
         KafkaProducer<String ,String > producer = new KafkaProducer<>(properties);
 
-        // create a producer record
-        ProducerRecord<String ,String > producerRecord = new ProducerRecord<>("sec_topic","hello");
 
-        // send data
-        producer.send(producerRecord);
+
+        for (int i=0; i<10; i++ ){
+
+            String topic = "sec_topic";
+            String key = "id_" + i;
+            String value = "hello world " + i;
+
+            // create a producer record
+            ProducerRecord<String ,String > producerRecord =
+                    new ProducerRecord<>( topic, key, value );
+
+            // send data
+            producer.send(producerRecord, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception e) {
+                    //executed every time a record successfully sent or an exception is thrown
+                    if (e == null ){
+                        // the record was successfully sent
+                        log.info("key: " + key + " | Partition: " + metadata.partition());
+
+                    } else {
+                        log.error("Error while producing", e );
+                    }
+                }
+            });
+        }
+
+
+
 
         //flush the producer to send all data and black until done -- synchonous
         producer.flush();
