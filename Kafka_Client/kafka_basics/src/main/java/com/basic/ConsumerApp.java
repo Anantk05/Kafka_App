@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class ConsumerApp {
 
-    private static final Logger log = (Logger) LoggerFactory.getLogger(KafkaProducer.class.getSimpleName());
+    private static final Logger log = (Logger) LoggerFactory.getLogger(KafkaProducerDemo.class.getSimpleName());
 
     public static void main(String[] args) {
 
