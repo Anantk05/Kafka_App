@@ -1,0 +1,3 @@
+rootProject.name = 'Kafka_Client'
+include 'kafka_basics'
+
